@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaMonitor - Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f6f9;
+    }
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 8px 8px 0 0;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+    header button {
+      background-color: white;
+      color: #007bff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .card, .grafico {
+      margin: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h2, .grafico h2 {
+      color: #007bff;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    .btn-ligar {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn-desligar {
+      background-color: #dc3545;
+      color: white;
+    }
+    canvas {
+      width: 100% !important;
+      max-height: 280px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>AquaMonitor - Dashboard</h1>
+    <button onclick="window.location.href='index.html'">Sair</button>
+    
+  </header>
+
+  <div class="card">
+    <h2>Nível da Caixa D'água</h2>
+    <p><strong>Nível Atual:</strong> <span id="nivelAtual">--</span> cm</p>
+    <p><strong>Capacidade Total:</strong> 100 cm</p>
+    <button id="toggleButton" class="btn btn-ligar">Ligar</button>
+    <img src ="img/free.png" alt="Caixa d'água" width="50" height="50">
+  </div>
+
+  <!-- GRÁFICOS -->
+  <div class="grafico">
+    <h2>Gráfico em Tempo Real - Nível da Água</h2>
+    <canvas id="graficoNivel"></canvas>
+  </div>
+
+  <div class="grafico">
+    <h2>Gráfico em Tempo Real - Desnível</h2>
+    <canvas id="graficoDesnivel"></canvas>
+  </div>
+
+  <script>
+    function logout() {
+      window.location.href = 'index.html';
+    }
+
+    const toggleButton = document.getElementById("toggleButton");
+    
+    let ligado = false;
+    toggleButton.addEventListener("click", () => {
+      ligado = !ligado;
+      toggleButton.textContent = ligado ? "Desligar" : " Ligar ";
+      toggleButton.classList.toggle("btn-ligar", !ligado);
+      toggleButton.classList.toggle("btn-desligar", ligado);
+    });
+
+    const nivelSpan = document.getElementById("nivelAtual");
+
+    // === Configuração dos gráficos ===
+    const nivelAgua = new Chart(document.getElementById('graficoNivel'), {
+      type: 'line',
+      data: { labels: [], datasets: [{
+        label: 'Nível da Água (cm)',
+        borderColor: '#007bff',
+        data: [],
+        fill: false,
+        tension: 0.3
+      }]},
+      options: { scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+
+    const desnivel = new Chart(document.getElementById('graficoDesnivel'), {
+      type: 'line',
+      data: { labels: [], datasets: [{
+        label: 'Desnível (cm)',
+        borderColor: '#dc3545',
+        data: [],
+        fill: false,
+        tension: 0.3
+      }]},
+      options: { scales: { y: { beginAtZero: true, max: 10 } } }
+    });
+
+    // === Simulação realista ===
+    let nivelAtual = 70;   // começa em 70 cm
+    let direcao = 1;       // 1 = subindo, -1 = descendo
+    let estabilidade = 0;  // contador de estabilidade (ficar parado)
+
+    function atualizarGraficos() {
+      const hora = new Date().toLocaleTimeString();
+
+      // Simula estabilidade (às vezes fica parado um tempo)
+      if (Math.random() < 0.2) {
+        estabilidade++;
+      } else {
+        estabilidade = 0;
+      }
+
+      // Muda o nível suavemente
+      if (estabilidade < 3) {
+        const variacao = (Math.random() * 0.5) * direcao; // variação pequena
+        nivelAtual += variacao;
+      }
+
+      // Limita entre 0 e 100
+      if (nivelAtual > 100) {
+        nivelAtual = 100;
+        direcao = -1; // começa a descer
+      } else if (nivelAtual < 0) {
+        nivelAtual = 0;
+        direcao = 1; // começa a subir
+      }
+
+      // Atualiza gráfico de nível
+      nivelAgua.data.labels.push(hora);
+      nivelAgua.data.datasets[0].data.push(nivelAtual.toFixed(2));
+      if (nivelAgua.data.labels.length > 15) {
+        nivelAgua.data.labels.shift();
+        nivelAgua.data.datasets[0].data.shift();
+      }
+      nivelAgua.update();
+
+      // Simula desnível menor e aleatório
+      const valorDesnivel = (Math.abs(Math.sin(Date.now() / 5000)) * 5 + Math.random()).toFixed(2);
+      desnivel.data.labels.push(hora);
+      desnivel.data.datasets[0].data.push(valorDesnivel);
+      if (desnivel.data.labels.length > 15) {
+        desnivel.data.labels.shift();
+        desnivel.data.datasets[0].data.shift();
+      }
+      desnivel.update();
+
+      // Atualiza valor no texto
+      nivelSpan.textContent = nivelAtual.toFixed(2);
+    }
+
+    setInterval(atualizarGraficos, 2000);
+  </script>
+
+</body>
+</html>
