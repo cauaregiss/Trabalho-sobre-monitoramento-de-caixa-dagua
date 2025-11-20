@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard Arduino</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <style>
+    :root{--primary:#007bff;--success:#28a745;--danger:#dc3545}
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f4f6f9}
+    header{background:var(--primary);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+    header h1{margin:0;font-size:18px}
+    .container{display:flex;gap:18px;padding:18px}
+    .left{flex:1}
+    .right{width:340px}
+    .card, .grafico{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,0.08);margin-bottom:16px}
+    .card h2,.grafico h2{color:var(--primary);margin:0 0 8px}
+    #nivelAtual{font-weight:bold}
+    .controls button{padding:10px 14px;border-radius:6px;border:none;margin-right:8px;cursor:pointer}
+    .btn-ligar{background:var(--success);color:#fff}
+    .btn-desligar{background:var(--danger);color:#fff}
+    canvas{width:100% !important;max-height:260px}
+    /* serial panel */
+    #log{height:220px;overflow:auto;border:1px solid #ddd;padding:8px;white-space:pre-wrap;background:#fff}
+    select,button{font-size:14px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dashboard - Arduino / AquaMonitor</h1>
+    <button onclick="window.location.href='index.html'">Voltar</button>
+  </header>
+
+  <div class="container">
+    <div class="left">
+      <div class="card">
+        <h2>Nível da Caixa D'água</h2>
+        <p><strong>Nível Atual:</strong> <span id="nivelAtual">--</span> cm</p>
+  <p><strong>Capacidade Total:</strong> 100 cm</p>
+  <!-- <button id="toggleButton" class="controls btn-ligar">Ligar</button> -->
+      </div>
+
+      <div class="grafico">
+        <h2>Gráfico em Tempo Real - Nível da Água</h2>
+        <canvas id="graficoNivel"></canvas>
+      </div>
+
+      <div class="grafico">
+        <h2>Gráfico em Tempo Real - Desnível</h2>
+        <canvas id="graficoDesnivel"></canvas>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <h2>Conexão Serial</h2>
+        <div>
+          <label for="ports">Porta:</label>
+          <select id="ports"></select>
+          <button id="refreshBtn">Atualizar</button>
+        </div>
+        <div style="margin-top:8px">
+          <button id="openBtn">Abrir</button>
+          <button id="closeBtn" disabled>Fechar</button>
+        </div>
+        <div style="margin-top:10px">
+          <button id="onBtn" disabled class="controls btn-ligar">ON</button>
+          <button id="offBtn" disabled class="controls btn-desligar">OFF</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Log Serial</h2>
+        <div id="log"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

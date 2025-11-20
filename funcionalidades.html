@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funcionalidades - AquaMonitor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Sidebar (menu lateral) -->
+  <div class="sidebar" id="sidebar">
+    <button class="close-btn" id="close-btn">×</button>
+    <h2>AquaMonitor</h2>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="funcionalidades.html">Funcionalidades</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+
+    <!-- Botão de Menu -->
+  <button class="menu-toggle" id="menu-toggle">☰</button>
+
+  <!-- Conteúdo Funcionalidades -->
+  <section class="funcionalidades-page">
+    <h1>Nossas Funcionalidades</h1>
+    <p class="intro">Confira as principais vantagens do sistema inteligente de monitoramento de caixas d’água.</p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>💧 Nível em tempo real</h3>
+        <p>Acompanhe instantaneamente a quantidade de água disponível em sua caixa d’água.</p>
+      </div>
+
+      <div class="card">
+        <h3>📊 Histórico de consumo</h3>
+        <p>Visualize relatórios diários e semanais sobre o uso de água na sua residência ou empresa.</p>
+      </div>
+
+      <div class="card">
+        <h3>⚙️ Controle automático</h3>
+        <p>O sistema aciona e desliga a bomba de forma inteligente, evitando desperdícios e enchendo na hora certa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>© 2025 AquaMonitor - Todos os direitos reservados.</p>
+  </footer>
+  <!-- Script para abrir/fechar a sidebar -->
+  <script>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const closeBtn = document.getElementById('close-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+    });
+
+    // Fechar clicando fora da sidebar (opcional)
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        sidebar.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

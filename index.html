@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento de Caixas D'Água</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="close-btn">×</button>
+        <h2>AquaMonitor</h2>
+        <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="funcionalidades.html">Funcionalidades</a></li>
+            <li><a href="contato.html">Contato</a></li>
+            <li><a href="login.html">Login</a></li>
+           
+        </ul>
+    </div>
+
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+
+    <div class="main-content">
+        <section class="hero">
+            <div class="hero-text">
+                <h2>Monitore sua caixa d’água em tempo real</h2>
+                <p>Saiba o nível de água, consumo e evite desperdícios com nosso sistema inteligente.</p>
+                <a href="#sobre" class="btn">Saiba mais</a>
+            </div>
+        </section>
+
+        <section id="sobre" class="sobre">
+            <div class="container">
+                <h2>Sobre o sistema</h2>
+                <p>
+                    Nosso sistema conecta sensores na sua caixa d’água e envia os dados em tempo real para nossa plataforma. 
+                    Assim, você acompanha tudo direto do navegador e garante mais economia e praticidade.
+                </p>
+            </div>
+        </section>
+
+        <section class="funcionalidades">
+            <div class="container">
+                <h2>Funcionalidades</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Nível em tempo real</h3>
+                    </div>
+                    <div class="card">
+                        <h3>Histórico de consumo</h3>
+                    </div>
+                    <div class="card">
+                        <h3>Controle automático</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 AquaMonitor - Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts do Firebase compatível -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script>
+        // Configuração do seu projeto Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCM2ttRU74dQ3tvJ6pT-CirPaicFpXaI2s",
+            authDomain: "aquamonitor-b01e0.firebaseapp.com",
+            projectId: "aquamonitor-b01e0",
+            storageBucket: "aquamonitor-b01e0.firebasestorage.app",
+            messagingSenderId: "142579099024",
+            appId: "1:142579099024:web:8d2cdea7f6682029ceff15",
+            measurementId: "G-HYFHQ08Y75"
+        };
+
+        // Inicializa o Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Função para ler o documento
+        const lerDados = async () => {
+            try {
+                const docRef = db.collection("Usuarios").doc("Id_Controle");
+                const docSnap = await docRef.get();
+
+                if (docSnap.exists) {
+                    console.log("Dados do documento:", docSnap.data());
+                } else {
+                    console.log("Documento não encontrado!");
+                }
+            } catch (e) {
+                console.error("Erro ao ler documento: ", e);
+            }
+        };
+
+        lerDados();
+    </script>
+
+    <script>
+        const toggleBtn = document.getElementById('menu-toggle');
+        const closeBtn = document.getElementById('close-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

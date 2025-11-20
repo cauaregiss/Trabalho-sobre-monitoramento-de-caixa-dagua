@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contato</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sidebar (menu lateral) -->
+  <div class="sidebar" id="sidebar">
+    <button class="close-btn" id="close-btn">×</button>
+    <h2>AquaMonitor</h2>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="funcionalidades.html">Funcionalidades</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="login.html">Login</a></li>
+       
+    </ul>
+  </div>
+
+    <!-- Botão de Menu -->
+  <button class="menu-toggle" id="menu-toggle">☰</button>
+
+  <!-- Seção de Contato -->
+  <section class="contato">
+    <h2>Entre em Contato</h2>
+    <p>Preencha o formulário abaixo e retornaremos o mais rápido possível.</p>
+
+    <form action="https://formspree.io/f/xgvzjynk" method="POST">
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" name="nome" id="nome" required>
+  </div>
+
+  <div class="form-group">
+    <label for="email">E-mail</label>
+    <input type="email" name="email" id="email" required>
+  </div>
+
+  <div class="form-group">
+    <label for="mensagem">Mensagem</label>
+    <textarea name="mensagem" id="mensagem" rows="5" required></textarea>
+  </div>
+
+  <button type="submit">Enviar</button>
+
+  <!-- redireciona -->
+  <input type="hidden" name="_next" value="https://SEU_SITE/obrigado.html">
+</form>  </section>
+
+<!-- Script para abrir/fechar a sidebar -->
+  <script>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const closeBtn = document.getElementById('close-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+    });
+
+    // Fechar clicando fora da sidebar (opcional)
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        sidebar.classList.remove('active');
+      }
+    });
+  </script>
+
+
+</body>
+</html>
